@@ -16,8 +16,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           secretOrKey: process.env.JWT_SECRET,
         });
       }
-
-
       private static extractJWT(req: Request): string | null {
         // Check if the cookie is present
         if (req.cookies && 'token' in req.cookies) {
