@@ -24,6 +24,11 @@ model User {
   updatedAt           DateTime    @updatedAt
 }
 
+model otp {
+  id      String    @id @default(uuid())
+  email   String
+  code    String
+}
 enum UserRole {
   ADMIN
   USER

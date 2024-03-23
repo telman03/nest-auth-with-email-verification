@@ -8,7 +8,7 @@ async function bootstrap() {
 
     // Swagger configuration
     const config = new DocumentBuilder()
-        .setTitle('Your API Title')
+        .setTitle('Nest Auth with Email Verification')
         .setDescription('API description')
         .setVersion('1.0')
         .addTag('api')
