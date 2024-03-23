@@ -20,6 +20,7 @@ model User {
   lastName            String
   hashedPassword      String
   role                UserRole    
+  isVerifed           Boolean
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 }

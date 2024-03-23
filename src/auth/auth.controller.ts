@@ -1,13 +1,14 @@
 import { SignUpDto } from './dto/signup.dto';
 import { Body, Controller, Get, Post, Request, Response , Req, Res} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { NotFoundException, UnauthorizedException,UseGuards } from '@nestjs/common';
+import { NotFoundException, BadRequestException,UnauthorizedException,UseGuards } from '@nestjs/common';
 import { SignInDto } from './dto/signin.dto';
 import { Request as ExpressRequest } from 'express';
 import { Response as ExpressResponse } from 'express';
 import { HttpOnlyGuard } from './http-only.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
+import { VerificationCodeDto } from './dto/verify-user.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -50,6 +51,28 @@ export class AuthController {
         role: user.role,
       };
     }
+
+    @Post('verify')
+    async verifyCode(@Body() dto: VerificationCodeDto): Promise<any> {
+      const { email, code } = dto;
+
+      if (!email || !code) {
+        throw new BadRequestException('Email and code are required');
+      }
   
+      const isValid = await this.authService.verifyUser(dto);
+  
+      if (!isValid) {
+        throw new BadRequestException('Invalid verification code');
+      }
+
+      await this.authService.markUserAsVerified(email)
+  
+      // Optionally, mark the user as verified in the database
+      // await this.authService.markUserAsVerified(email);
+  
+      return { message: 'Verification successful' };
+    
+    }
   
 }

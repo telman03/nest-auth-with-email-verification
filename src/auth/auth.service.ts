@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/signin.dto';
 import { Request, Response } from 'express';
 import { Resend } from 'resend';
+import { VerificationCodeDto } from './dto/verify-user.dto';
+import { dot } from 'node:test/reporters';
 
 
 const resend = new Resend('re_9wgbAAvU_AHmZVLJQ4gs2xQG3bnJMGv8y');
@@ -50,6 +52,7 @@ export class AuthService {
         lastName,
         role: UserRole.USER,
         hashedPassword,
+        isVerifed: false
       },
     });
     // Send OTP via email
@@ -72,6 +75,22 @@ export class AuthService {
       },
     };
   }
+  async verifyUser(dto: VerificationCodeDto): Promise<boolean> {
+    const {email, code} = dto
+    const otp = await this.prisma.otp.findFirst({
+      where: {  email, code }
+    });
+
+    return !!otp;
+  }
+
+
+  async markUserAsVerified(email: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { email },
+      data: { isVerifed: true },
+    });
+  }
 
   async signin(dto: SignInDto, req: Request, res: Response) {
     const { email, password } = dto;
@@ -84,6 +103,9 @@ export class AuthService {
 
     if (!foundUser) {
       throw new BadRequestException('Wrong credentials');
+    }
+    if(!foundUser.isVerifed){
+      throw new UnauthorizedException('Please verify your email before signing in');
     }
 
     const compareSuccess = await this.comparePasswords({
