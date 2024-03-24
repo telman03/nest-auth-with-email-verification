@@ -67,10 +67,6 @@ export class AuthController {
       }
 
       await this.authService.markUserAsVerified(email)
-  
-      // Optionally, mark the user as verified in the database
-      // await this.authService.markUserAsVerified(email);
-  
       return { message: 'Verification successful' };
     
     }

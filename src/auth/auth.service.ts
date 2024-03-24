@@ -10,7 +10,6 @@ import { SignInDto } from './dto/signin.dto';
 import { Request, Response } from 'express';
 import { Resend } from 'resend';
 import { VerificationCodeDto } from './dto/verify-user.dto';
-import { dot } from 'node:test/reporters';
 
 
 const resend = new Resend('re_9wgbAAvU_AHmZVLJQ4gs2xQG3bnJMGv8y');
@@ -185,9 +184,5 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
-  }
-  private generateOTP(): string {
-    // Generate a random 6-digit OTP code
-    return Math.floor(100000 + Math.random() * 900000).toString();
   }
 }
