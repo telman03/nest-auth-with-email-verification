@@ -1,12 +1,12 @@
 import { SignUpDto } from './dto/signup.dto';
-import { Body, Controller, Get, Post, Request, Response , Req, Res} from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, Response , Req} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { NotFoundException, BadRequestException,UnauthorizedException,UseGuards } from '@nestjs/common';
+import {  BadRequestException,UnauthorizedException,UseGuards } from '@nestjs/common';
 import { SignInDto } from './dto/signin.dto';
 import { Request as ExpressRequest } from 'express';
-import { Response as ExpressResponse } from 'express';
+
 import { HttpOnlyGuard } from './http-only.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 import { VerificationCodeDto } from './dto/verify-user.dto';
 
@@ -32,8 +32,9 @@ export class AuthController {
       return this.authService.signout(req, res);
     }
 
-    @Get('/profile')
+    @Get('profile')
     @UseGuards(HttpOnlyGuard)
+    @ApiCookieAuth()
     async getProfile(@Req() req: ExpressRequest) {
       const token = req.cookies.token;
     

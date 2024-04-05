@@ -129,7 +129,7 @@ export class AuthService {
     }
 
     res.cookie('token', token, { httpOnly: true, secure: true }); // secure: true in production
-    // console.log(token);
+    console.log(token);
 
     return res.send({
       message: 'Logged in successfully',
