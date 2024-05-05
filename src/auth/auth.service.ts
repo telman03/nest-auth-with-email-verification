@@ -12,7 +12,7 @@ import { Resend } from 'resend';
 import { VerificationCodeDto } from './dto/verify-user.dto';
 
 
-const resend = new Resend('re_9wgbAAvU_AHmZVLJQ4gs2xQG3bnJMGv8y');
+const resend = new Resend('***resend key***');
 
 
 @Injectable()
